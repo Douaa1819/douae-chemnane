@@ -12,5 +12,5 @@ export const personalData = {
   medieum : 'https://medium.com/@douaachemnane',
   twitter: 'https://x.com/DouaaD19',
   devUsername: "douaa19_20",
-  resume: "https://drive.google.com/file/d/1_3S2WG9-VkvYZZExFX1blsdnNF0tc5lF/view?usp=sharing"
+  resume: "https://drive.google.com/file/d/1n1gc3r7xOWGAo1uxc5sRsbkqF31A_R6S/view?usp=sharing"
 }
