@@ -1,9 +1,7 @@
-const path = require('path')
- 
-module.exports = {
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
     remotePatterns: [
       {
@@ -23,4 +21,10 @@ module.exports = {
       },
     ],
   },
+  experimental: {
+    // Enable if needed
+    // serverActions: true,
+  },
 }
+
+module.exports = nextConfig
