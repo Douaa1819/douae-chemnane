@@ -8,29 +8,34 @@ import ContactSection from "./components/homepage/contact";
 import Skills from "./components/homepage/skills";
 import Projects from "./components/homepage/projects";
 
-// Client Components with proper loading state
-const ClientComponents = dynamic(
-  () => import('./components/client-components'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-violet-500"></div>
-      </div>
-    )
-  }
+// Loading component
+const Loading = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-violet-500"></div>
+  </div>
 );
+
+// Client Components with proper Next.js dynamic import
+const HeroSection = dynamic(() => import('./components/homepage/hero-section'), {
+  loading: () => <Loading />,
+  ssr: false
+});
+
+const Experience = dynamic(() => import('./components/homepage/experience'), {
+  loading: () => <Loading />,
+  ssr: false
+});
+
+const BlogSection = dynamic(() => import('./components/homepage/blog'), {
+  loading: () => <Loading />,
+  ssr: false
+});
 
 async function getData() {
   try {
     const res = await fetch(
       `https://dev.to/api/articles?username=${personalData.devUsername}`,
-      { 
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+      { next: { revalidate: 3600 } } // Revalidate every hour
     );
     
     if (!res.ok) {
@@ -50,10 +55,18 @@ export default async function Home() {
 
   return (
     <main>
-      <ClientComponents blogs={blogs} />
+      <Suspense fallback={<Loading />}>
+        <HeroSection />
+      </Suspense>
       <AboutSection />
+      <Suspense fallback={<Loading />}>
+        <Experience />
+      </Suspense>
       <Skills />
       <Projects />
+      <Suspense fallback={<Loading />}>
+        <BlogSection blogs={blogs} />
+      </Suspense>
       <ContactSection />
     </main>
   );
