@@ -1,15 +1,25 @@
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { personalData } from "@/utils/data/personal-data";
+
+// Server Components
 import AboutSection from "./components/homepage/about";
 import ContactSection from "./components/homepage/contact";
 import Skills from "./components/homepage/skills";
 import Projects from "./components/homepage/projects";
-import { ClientWrapper } from './components/client-wrapper';
 
-// Import client components directly
-import HeroSection from "./components/homepage/hero-section";
-import Experience from "./components/homepage/experience";
-import Blog from "./components/homepage/blog";
+// Client Components with proper loading state
+const ClientComponents = dynamic(
+  () => import('./components/client-components'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-violet-500"></div>
+      </div>
+    )
+  }
+);
 
 async function getData() {
   try {
@@ -40,23 +50,10 @@ export default async function Home() {
 
   return (
     <main>
-      <ClientWrapper>
-        <HeroSection />
-      </ClientWrapper>
-      
+      <ClientComponents blogs={blogs} />
       <AboutSection />
-      
-      <ClientWrapper>
-        <Experience />
-      </ClientWrapper>
-      
       <Skills />
       <Projects />
-      
-      <ClientWrapper>
-        <Blog blogs={blogs} />
-      </ClientWrapper>
-      
       <ContactSection />
     </main>
   );

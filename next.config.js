@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: true
+  },
   images: {
     remotePatterns: [
       {
@@ -20,6 +24,17 @@ const nextConfig = {
         pathname: '**',
       },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    // Handle browser-specific code
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        module: false,
+      };
+    }
+    return config;
   },
   experimental: {
     // Enable if needed

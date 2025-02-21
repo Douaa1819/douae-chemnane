@@ -5,13 +5,17 @@
 import { personalData } from "@/utils/data/personal-data";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from 'react';
 import { BsGithub, BsLinkedin } from "react-icons/bs";
+import { FaMedium } from 'react-icons/fa6';
 import { MdDownload } from "react-icons/md";
 import { RiContactsFill } from "react-icons/ri";
-import { SiLeetcode } from "react-icons/si";
-import { FaMedium } from 'react-icons/fa6';
 
 function HeroSection() {
+  useEffect(() => {
+    // Any browser-specific code here
+  }, []);
+
   return (
     <section className="relative flex flex-col items-center justify-between py-4 lg:py-12">
       <Image
