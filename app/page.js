@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import { personalData } from "@/utils/data/personal-data";
 
 // Server Components
@@ -8,28 +7,13 @@ import ContactSection from "./components/homepage/contact";
 import Skills from "./components/homepage/skills";
 import Projects from "./components/homepage/projects";
 
-// Loading component
-const Loading = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-violet-500"></div>
-  </div>
-);
-
-// Client Components with proper Next.js dynamic import
-const HeroSection = dynamic(() => import('./components/homepage/hero-section'), {
-  loading: () => <Loading />,
-  ssr: false
-});
-
-const Experience = dynamic(() => import('./components/homepage/experience'), {
-  loading: () => <Loading />,
-  ssr: false
-});
-
-const BlogSection = dynamic(() => import('./components/homepage/blog'), {
-  loading: () => <Loading />,
-  ssr: false
-});
+// Import dynamic components
+import { 
+  Loading,
+  DynamicHeroSection,
+  DynamicExperience,
+  DynamicBlog 
+} from './components/dynamic-components';
 
 async function getData() {
   try {
@@ -56,16 +40,16 @@ export default async function Home() {
   return (
     <main>
       <Suspense fallback={<Loading />}>
-        <HeroSection />
+        <DynamicHeroSection />
       </Suspense>
       <AboutSection />
       <Suspense fallback={<Loading />}>
-        <Experience />
+        <DynamicExperience />
       </Suspense>
       <Skills />
       <Projects />
       <Suspense fallback={<Loading />}>
-        <BlogSection blogs={blogs} />
+        <DynamicBlog blogs={blogs} />
       </Suspense>
       <ContactSection />
     </main>
