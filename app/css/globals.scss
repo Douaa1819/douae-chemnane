@@ -3,37 +3,162 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: rgb(211, 216, 232);
+  --bg: #f5f7ff;
+  --fg: #0f172a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-  }
+.dark {
+  --bg: #030712;
+  --fg: #e2e8f0;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background-color: #0d1224;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
-#sticky-card-1 {
-  --index: 1;
+::selection {
+  background: rgba(236, 72, 153, 0.22);
 }
 
-#sticky-card-2 {
-  --index: 2;
+.container {
+  @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
 }
 
-#sticky-card-3 {
-  --index: 3;
+.section {
+  @apply scroll-mt-28 py-14 sm:py-20;
 }
 
-#sticky-card-4 {
-  --index: 4;
+.section-kicker {
+  @apply text-xs font-semibold uppercase tracking-[0.25em] text-pink-500 sm:text-sm;
 }
 
-.sticky-card {
-  // padding-top: calc(var(--index) * 2.5rem);
-  top: calc(var(--index) * 4rem);
+.glass-card {
+  @apply rounded-3xl border border-white/20 bg-white/75 p-6 shadow-2xl shadow-fuchsia-500/10 backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/70;
+}
+
+.icon-btn {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/70 bg-white text-sm font-medium text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200;
+}
+
+.cta-btn {
+  @apply inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-medium text-white shadow-xl shadow-pink-500/30 transition hover:translate-y-[-1px] hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100;
+}
+
+.cta-btn-outline {
+  @apply inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200;
+}
+
+.cta-btn-muted {
+  @apply inline-flex items-center gap-2 rounded-full border border-transparent bg-slate-200/80 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+}
+
+.skill-pill {
+  @apply rounded-full border border-slate-300/70 bg-slate-100/70 px-3 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200;
+}
+
+.project-link {
+  @apply inline-flex items-center gap-1 rounded-full border border-slate-300/70 px-3 py-1.5 text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:text-slate-200;
+}
+
+.project-link-disabled {
+  @apply inline-flex cursor-not-allowed items-center rounded-full border border-slate-200 px-3 py-1.5 text-slate-400 dark:border-slate-700 dark:text-slate-500;
+}
+
+.form-label {
+  @apply mb-2 block text-xs font-medium uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400;
+}
+
+.input-field {
+  @apply w-full rounded-2xl border border-slate-300/80 bg-white/90 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-pink-500 dark:border-slate-700 dark:bg-slate-950/70 dark:text-slate-100;
+}
+
+.contact-link {
+  @apply flex items-center gap-3 rounded-2xl border border-slate-300/70 bg-white/80 px-4 py-3 text-sm text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200;
+}
+
+.scroll-progress {
+  @apply fixed left-0 top-0 z-[70] h-1 w-full origin-left bg-gradient-to-r from-pink-500 via-fuchsia-500 to-violet-500;
+}
+
+.premium-bg {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.35;
+}
+
+.orb-one {
+  background: linear-gradient(130deg, #ec4899, #8b5cf6);
+  width: 340px;
+  height: 340px;
+  top: -80px;
+  left: -80px;
+  animation: float-1 15s ease-in-out infinite;
+}
+
+.orb-two {
+  background: linear-gradient(130deg, #ec4899, #3b82f6);
+  width: 300px;
+  height: 300px;
+  right: -80px;
+  top: 25%;
+  animation: float-2 18s ease-in-out infinite;
+}
+
+.orb-three {
+  background: linear-gradient(130deg, #f97316, #ec4899);
+  width: 280px;
+  height: 280px;
+  left: 35%;
+  bottom: -90px;
+  animation: float-3 16s ease-in-out infinite;
+}
+
+@keyframes float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, 40px);
+  }
+}
+
+@keyframes float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-20px, 45px);
+  }
+}
+
+@keyframes float-3 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(25px, -35px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .scroll-progress {
+    animation: none !important;
+    transition: none !important;
+  }
 }

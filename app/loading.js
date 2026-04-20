@@ -1,7 +1,10 @@
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-violet-500"></div>
+    <div className="flex min-h-screen items-center justify-center bg-slate-950">
+      <div className="relative h-24 w-24">
+        <span className="absolute inset-0 animate-ping rounded-full bg-pink-500/40" />
+        <span className="absolute inset-2 animate-spin rounded-full border-2 border-transparent border-t-pink-400 border-r-fuchsia-500" />
+      </div>
     </div>
   );
-} 
+}

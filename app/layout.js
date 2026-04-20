@@ -1,33 +1,30 @@
-import { GoogleTagManager } from "@next/third-parties/google";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "./components/footer";
-import ScrollToTop from "./components/helper/scroll-to-top";
-import Navbar from "./components/navbar";
-import "./css/card.scss";
 import "./css/globals.scss";
-const inter = Inter({ subsets: ["latin"] });
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Portfolio of Douaa Chemnane - Software Developer",
+  title: "Douaa Chemnane | Full Stack Developer Portfolio",
   description:
-    "This is the portfolio of Douaa Chemnane. I am a full stack developer and a self taught developer. I love to learn new things and I am always open to collaborating with others. I am a quick learner and I am always looking for new challenges.",
+    "Premium personal portfolio of Douaa Chemnane, Full Stack Developer and Automation Engineer building scalable systems and elegant digital experiences.",
+  keywords: [
+    "Douaa Chemnane",
+    "Portfolio",
+    "Full Stack Developer",
+    "Automation Engineer",
+    "Next.js",
+    "Spring Boot",
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ToastContainer />
-        <main className="min-h-screen relative mx-auto px-6 sm:px-12 lg:max-w-[70rem] xl:max-w-[76rem] 2xl:max-w-[92rem] text-white">
-          <Navbar />
-          {children}
-          <ScrollToTop />
-        </main>
-        <Footer />
+      <body className={plusJakarta.className}>
+        {children}
+        <ToastContainer theme="colored" position="bottom-right" />
       </body>
-      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM} />
     </html>
   );
 }
