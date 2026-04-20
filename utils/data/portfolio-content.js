@@ -32,6 +32,7 @@ export const portfolioContent = {
       ],
     },
     about: {
+      focusAreasTitle: "Focus areas",
       title: "About Me",
       description:
         "I am a developer focused on building robust software systems and elegant interfaces. My passion is turning complex ideas into secure, scalable, and beautiful products through modern engineering practices, automation, and thoughtful design.",
@@ -102,6 +103,7 @@ export const portfolioContent = {
       ],
     },
     about: {
+      focusAreasTitle: "Axes de focus",
       title: "À propos",
       description:
         "Je suis développeuse, spécialisée dans la création de systèmes logiciels robustes et d'interfaces élégantes. Ma passion est de transformer des idées complexes en produits sécurisés, évolutifs et visuellement soignés.",

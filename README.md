@@ -22,6 +22,12 @@ Update all portfolio text/data from:
 
 - `utils/data/portfolio-content.js`
 
+## Environment
+
+For correct Open Graph URLs, `robots.txt`, and `sitemap.xml` on production, set:
+
+- `NEXT_PUBLIC_APP_URL` — full site origin (for example `https://your-domain.vercel.app`)
+
 ## Contact form config
 
 Set at least one delivery channel in `.env.local`:

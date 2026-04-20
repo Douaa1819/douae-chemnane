@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { toast } from "react-toastify";
 import {
   FiArrowUpRight,
@@ -35,9 +35,15 @@ export default function PortfolioClient() {
   const [activeSection, setActiveSection] = useState("hero");
   const [sending, setSending] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 24, mass: 0.2 });
+  const progressSpring = { stiffness: 140, damping: 24, mass: 0.2 };
+  const progress = useSpring(scrollYProgress, reduceMotion ? { ...progressSpring, stiffness: 400, damping: 50 } : progressSpring);
+
+  const tHero = reduceMotion ? { duration: 0.01 } : { duration: 0.75 };
+  const tSection = reduceMotion ? { duration: 0.01 } : { duration: 0.65 };
+  const tCard = reduceMotion ? { duration: 0.01 } : { duration: 0.55 };
 
   const personal = portfolioContent.personal;
   const copy = portfolioContent[locale];
@@ -61,12 +67,28 @@ export default function PortfolioClient() {
   }, []);
 
   useEffect(() => {
+    document.documentElement.lang = locale === "fr" ? "fr" : "en";
+  }, [locale]);
+
+  useEffect(() => {
+    if (reduceMotion) return;
     const onMove = (event) => {
       setCursor({ x: event.clientX, y: event.clientY });
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -143,15 +165,18 @@ export default function PortfolioClient() {
       className="relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={reduceMotion ? { duration: 0.01 } : { duration: 0.6 }}
     >
-      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
+      <motion.div className="scroll-progress" style={{ scaleX: progress }} aria-hidden />
 
-      <motion.div
-        className="pointer-events-none fixed z-20 hidden h-40 w-40 rounded-full bg-pink-500/15 blur-3xl lg:block"
-        animate={{ x: cursor.x - 80, y: cursor.y - 80 }}
-        transition={{ type: "spring", damping: 24, stiffness: 140, mass: 0.4 }}
-      />
+      {!reduceMotion && (
+        <motion.div
+          className="pointer-events-none fixed z-20 hidden h-40 w-40 rounded-full bg-pink-500/15 blur-3xl lg:block"
+          animate={{ x: cursor.x - 80, y: cursor.y - 80 }}
+          transition={{ type: "spring", damping: 24, stiffness: 140, mass: 0.4 }}
+          aria-hidden
+        />
+      )}
 
       <div className="premium-bg" aria-hidden="true">
         <span className="orb orb-one" />
@@ -159,11 +184,18 @@ export default function PortfolioClient() {
         <span className="orb orb-three" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-white/70 backdrop-blur-xl dark:bg-slate-950/60">
-        <nav className="container flex h-20 items-center justify-between">
+      <a
+        href="#main-content"
+        className="absolute left-4 top-4 z-[100] -translate-y-[120%] rounded-full bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-lg outline-none ring-2 ring-offset-2 ring-offset-white transition focus:translate-y-0 focus:ring-pink-500 dark:bg-white dark:text-slate-900 dark:ring-offset-slate-900"
+      >
+        {locale === "fr" ? "Aller au contenu" : "Skip to content"}
+      </a>
+
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-white/70 backdrop-blur-xl dark:bg-slate-950/60 supports-[padding:env(safe-area-inset-top)]:pt-[env(safe-area-inset-top)]">
+        <nav className="container flex h-16 min-h-[4rem] items-center justify-between sm:h-20" aria-label="Primary">
           <button
             type="button"
-            className="text-left"
+            className="text-left touch-manipulation"
             onClick={() => handleNavClick("hero")}
             aria-label="Navigate to top"
           >
@@ -177,7 +209,7 @@ export default function PortfolioClient() {
                 type="button"
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`rounded-full px-4 py-2 text-sm transition ${
+                className={`touch-manipulation rounded-full px-4 py-2 text-sm transition ${
                   activeSection === item.id
                     ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
                     : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
@@ -191,21 +223,28 @@ export default function PortfolioClient() {
           <div className="hidden items-center gap-2 md:flex">
             <button
               type="button"
-              className="icon-btn"
+              className="icon-btn touch-manipulation"
               aria-label="Switch language"
               onClick={() => setLocale(locale === "en" ? "fr" : "en")}
             >
               {copy.languageLabel}
             </button>
-            <button type="button" className="icon-btn" aria-label="Toggle theme" onClick={toggleTheme}>
+            <button
+              type="button"
+              className="icon-btn touch-manipulation"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
+            >
               {theme === "dark" ? <FiSun /> : <FiMoon />}
             </button>
           </div>
 
           <button
             type="button"
-            className="icon-btn md:hidden"
+            className="icon-btn touch-manipulation md:hidden"
             aria-label="Toggle mobile menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
           >
             {mobileMenuOpen ? <FiX /> : <FiMenu />}
@@ -214,14 +253,29 @@ export default function PortfolioClient() {
       </header>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-x-4 top-24 z-40 rounded-2xl border border-white/20 bg-white p-4 shadow-2xl dark:bg-slate-900 md:hidden">
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm md:hidden"
+          aria-label={locale === "fr" ? "Fermer le menu" : "Close menu"}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {mobileMenuOpen && (
+        <div
+          id="mobile-nav"
+          className="fixed inset-x-4 top-[calc(5rem+env(safe-area-inset-top,0px))] z-40 max-h-[min(70vh,calc(100vh-7rem))] overflow-y-auto rounded-2xl border border-white/20 bg-white p-4 shadow-2xl dark:bg-slate-900 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={locale === "fr" ? "Menu de navigation" : "Mobile navigation menu"}
+        >
           <div className="grid gap-2">
             {copy.nav.map((item) => (
               <button
                 type="button"
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className="rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                className="touch-manipulation rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 {item.label}
               </button>
@@ -230,26 +284,30 @@ export default function PortfolioClient() {
           <div className="mt-3 flex items-center gap-2">
             <button
               type="button"
-              className="icon-btn w-full justify-center"
+              className="icon-btn w-full touch-manipulation justify-center"
               onClick={() => setLocale(locale === "en" ? "fr" : "en")}
             >
               {copy.languageLabel}
             </button>
-            <button type="button" className="icon-btn w-full justify-center" onClick={toggleTheme}>
+            <button type="button" className="icon-btn w-full touch-manipulation justify-center" onClick={toggleTheme}>
               {theme === "dark" ? copy.themeLight : copy.themeDark}
             </button>
           </div>
         </div>
       )}
 
-      <main className="container relative z-10 pb-20">
-        <section id="hero" className="section min-h-[86vh] pt-16">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="container relative z-10 pb-24 max-md:pb-[max(6rem,env(safe-area-inset-bottom,0px))]"
+      >
+        <section id="hero" className="section min-h-[86vh] pt-12 sm:pt-16">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
+            transition={tHero}
             className="max-w-4xl"
           >
             <p className="text-sm font-medium uppercase tracking-[0.25em] text-pink-500">{copy.hero.greeting}</p>
@@ -262,13 +320,13 @@ export default function PortfolioClient() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <button onClick={() => handleNavClick("projects")} className="cta-btn">
+              <button type="button" onClick={() => handleNavClick("projects")} className="cta-btn touch-manipulation">
                 {copy.hero.primaryCta}
               </button>
-              <button onClick={() => handleNavClick("contact")} className="cta-btn-outline">
+              <button type="button" onClick={() => handleNavClick("contact")} className="cta-btn-outline touch-manipulation">
                 {copy.hero.secondaryCta}
               </button>
-              <Link href={personal.cvUrl} className="cta-btn-muted" download>
+              <Link href={personal.cvUrl} className="cta-btn-muted touch-manipulation" download>
                 <FiDownload />
                 {copy.hero.tertiaryCta}
               </Link>
@@ -283,7 +341,7 @@ export default function PortfolioClient() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.55 }}
+                transition={tCard}
                 className="glass-card"
               >
                 <p className="text-3xl font-semibold text-slate-900 dark:text-white">{item.value}</p>
@@ -299,7 +357,7 @@ export default function PortfolioClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7 }}
+            transition={tSection}
             className="grid gap-8 lg:grid-cols-[1.6fr_1fr]"
           >
             <article className="glass-card">
@@ -308,7 +366,7 @@ export default function PortfolioClient() {
             </article>
             <aside className="glass-card">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-                Focus Areas
+                {copy.about.focusAreasTitle}
               </p>
               <div className="mt-4 space-y-3">
                 {copy.about.highlights.map((item) => (
@@ -328,7 +386,7 @@ export default function PortfolioClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7 }}
+            transition={tSection}
           >
             <p className="section-kicker">{copy.skills.title}</p>
             <p className="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">{copy.skills.subtitle}</p>
@@ -341,7 +399,11 @@ export default function PortfolioClient() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0.01 }
+                        : { duration: 0.4, delay: index * 0.05 }
+                    }
                     className="glass-card"
                   >
                     <div className="mb-4 flex items-center justify-between">
@@ -353,7 +415,7 @@ export default function PortfolioClient() {
                         initial={{ width: 0 }}
                         whileInView={{ width: `${progressPercent}%` }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
+                        transition={reduceMotion ? { duration: 0.01 } : { duration: 0.8, delay: 0.2 }}
                         className="h-full rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500"
                       />
                     </div>
@@ -377,7 +439,7 @@ export default function PortfolioClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7 }}
+            transition={tSection}
           >
             <p className="section-kicker">{copy.projects.title}</p>
             <p className="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">{copy.projects.subtitle}</p>
@@ -388,8 +450,8 @@ export default function PortfolioClient() {
                   initial={{ opacity: 0, y: 28 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
-                  whileHover={{ y: -4 }}
+                  transition={reduceMotion ? { duration: 0.01 } : { duration: 0.5, delay: index * 0.08 }}
+                  whileHover={reduceMotion ? undefined : { y: -4 }}
                   className="group overflow-hidden rounded-3xl border border-white/20 bg-white/80 p-6 shadow-xl shadow-pink-500/10 dark:bg-slate-900/80"
                 >
                   <div className={`mb-5 h-36 rounded-2xl bg-gradient-to-br ${project.accent} p-4`}>
@@ -441,7 +503,7 @@ export default function PortfolioClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.65 }}
+            transition={tSection}
           >
             <p className="section-kicker">{copy.experience.title}</p>
             <div className="mt-7 grid gap-4">
@@ -469,7 +531,7 @@ export default function PortfolioClient() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7 }}
+            transition={tSection}
             className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]"
           >
             <article className="glass-card">
@@ -479,17 +541,22 @@ export default function PortfolioClient() {
               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                 <label className="block">
                   <span className="form-label">{copy.contact.form.name}</span>
-                  <input required name="name" className="input-field" />
+                  <input required name="name" autoComplete="name" className="input-field" />
                 </label>
                 <label className="block">
                   <span className="form-label">{copy.contact.form.email}</span>
-                  <input required type="email" name="email" className="input-field" />
+                  <input required type="email" name="email" autoComplete="email" className="input-field" />
                 </label>
                 <label className="block">
                   <span className="form-label">{copy.contact.form.message}</span>
                   <textarea required name="message" rows={5} className="input-field resize-none" />
                 </label>
-                <button disabled={sending} className="cta-btn w-full justify-center">
+                <button
+                  type="submit"
+                  disabled={sending}
+                  aria-busy={sending}
+                  className="cta-btn w-full touch-manipulation justify-center"
+                >
                   {sending ? "..." : copy.contact.form.submit}
                 </button>
               </form>
@@ -504,7 +571,7 @@ export default function PortfolioClient() {
                   <FiMail />
                   {personal.email}
                 </a>
-                <button className="contact-link w-full text-left" onClick={handleCopyEmail}>
+                <button type="button" className="contact-link w-full text-left touch-manipulation" onClick={handleCopyEmail}>
                   <FiCopy />
                   {copy.contact.copyEmail}
                 </button>
@@ -525,7 +592,7 @@ export default function PortfolioClient() {
 
       <a
         href="#contact"
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-2xl shadow-pink-500/40 transition hover:translate-y-[-1px] md:hidden dark:bg-white dark:text-slate-900"
+        className="fixed z-40 inline-flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-2xl shadow-pink-500/40 transition hover:translate-y-[-1px] max-md:bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] max-md:right-[max(1rem,env(safe-area-inset-right,0px))] md:hidden dark:bg-white dark:text-slate-900"
       >
         <FiMail />
         {copy.contact.floatingCta}
@@ -544,7 +611,7 @@ export default function PortfolioClient() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={item.label}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/60 text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:text-slate-200"
+                  className="inline-flex h-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-slate-300/60 text-slate-700 transition hover:border-pink-500 hover:text-pink-500 dark:border-slate-700 dark:text-slate-200"
                 >
                   <Icon />
                 </a>
