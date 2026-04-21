@@ -288,7 +288,7 @@ export default function PortfolioClient() {
             <p className="text-[11px] text-slate-500 dark:text-ink-muted">{personal.location}</p>
           </button>
 
-          <div className="hidden items-center gap-0.5 md:flex">
+          <div className="hidden items-center gap-0.5 xl:flex">
             {copy.nav.map((item) => (
               <button
                 type="button"
@@ -326,7 +326,7 @@ export default function PortfolioClient() {
 
           <button
             type="button"
-            className="icon-btn touch-manipulation !h-10 !w-10 rounded-lg md:hidden"
+            className="icon-btn touch-manipulation !h-10 !w-10 rounded-lg xl:hidden"
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav"
@@ -340,7 +340,7 @@ export default function PortfolioClient() {
       {mobileMenuOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm xl:hidden"
           aria-label={locale === "fr" ? "Fermer le menu" : "Close menu"}
           onClick={() => setMobileMenuOpen(false)}
         />
@@ -349,7 +349,7 @@ export default function PortfolioClient() {
       {mobileMenuOpen && (
         <div
           id="mobile-nav"
-          className="fixed inset-x-3 top-[calc(3.75rem+env(safe-area-inset-top,0px))] z-40 max-h-[min(72vh,calc(100dvh-5rem))] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-surface-border dark:bg-surface-card md:hidden"
+          className="fixed inset-x-3 top-[calc(3.75rem+env(safe-area-inset-top,0px))] z-40 max-h-[min(72vh,calc(100dvh-5rem))] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-surface-border dark:bg-surface-card xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={locale === "fr" ? "Menu de navigation" : "Mobile navigation menu"}
@@ -388,7 +388,7 @@ export default function PortfolioClient() {
       <main
         id="main-content"
         tabIndex={-1}
-        className="container relative z-10 pb-28 max-md:pb-[max(7rem,env(safe-area-inset-bottom,0px))]"
+        className="container relative z-10 overflow-x-clip pb-28 max-md:pb-[max(7rem,env(safe-area-inset-bottom,0px))]"
       >
         {/* Hero */}
         <section
@@ -433,7 +433,7 @@ export default function PortfolioClient() {
               ))}
             </motion.div>
 
-            <motion.div variants={heroItem} className="mt-10 flex flex-wrap gap-3">
+            <motion.div variants={heroItem} className="mt-11 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={() => handleNavClick("projects")}
@@ -818,7 +818,7 @@ export default function PortfolioClient() {
             transition={tSection}
             className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]"
           >
-            <article className="premium-card-hover relative overflow-hidden">
+            <article className="premium-card-hover relative min-w-0 overflow-hidden">
               {formSuccess && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
@@ -890,7 +890,7 @@ export default function PortfolioClient() {
               </form>
             </article>
 
-            <aside className="premium-card-hover">
+            <aside className="premium-card-hover min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-ink-muted">
                 {copy.contact.quickLinks}
               </p>

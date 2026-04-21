@@ -26,6 +26,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   min-height: 100vh;
+  overflow-x: hidden;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   transition: background-color 280ms ease, color 280ms ease;
 }
@@ -39,7 +40,7 @@ body {
 }
 
 .section {
-  @apply scroll-mt-24 py-16 sm:scroll-mt-28 sm:py-24;
+  @apply scroll-mt-24 py-16 sm:scroll-mt-28 sm:py-24 lg:py-28;
 }
 
 .section-kicker {
@@ -47,7 +48,7 @@ body {
 }
 
 .heading-xl {
-  @apply text-[clamp(2rem,5vw,3.5rem)] font-semibold tracking-tightish text-slate-900 dark:text-ink;
+  @apply text-[clamp(2.15rem,5vw,3.75rem)] font-semibold tracking-tightish text-slate-900 dark:text-ink;
 }
 
 .heading-lg {
@@ -55,7 +56,7 @@ body {
 }
 
 .body-text {
-  @apply text-[15px] leading-[1.7] text-slate-600 dark:text-ink-muted sm:text-base;
+  @apply text-[15px] leading-[1.75] text-slate-600 dark:text-ink-muted sm:text-base;
 }
 
 .premium-card {
@@ -83,15 +84,15 @@ body {
 }
 
 .icon-btn {
-  @apply inline-flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-xl border border-slate-200/80 bg-white text-sm font-medium text-slate-700 transition hover:border-brand/40 hover:text-brand dark:border-surface-border dark:bg-surface-card dark:text-ink dark:hover:border-brand/50;
+  @apply inline-flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-xl border border-slate-200/80 bg-white text-sm font-medium text-slate-700 transition duration-200 hover:border-brand/40 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-surface-border dark:bg-surface-card dark:text-ink dark:hover:border-brand/50 dark:focus-visible:ring-offset-surface-dark;
 }
 
 .cta-btn {
-  @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-blue-600 hover:shadow-glow-sm active:scale-[0.98] dark:hover:bg-blue-500;
+  @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 transition duration-200 hover:bg-blue-600 hover:shadow-glow-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:hover:bg-blue-500 dark:focus-visible:ring-offset-surface-dark;
 }
 
 .cta-btn-outline {
-  @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand/50 hover:text-brand dark:border-surface-border dark:bg-surface-card dark:text-ink dark:hover:border-brand/40;
+  @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-6 py-3 text-sm font-semibold text-slate-800 transition duration-200 hover:border-brand/50 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-surface-border dark:bg-surface-card dark:text-ink dark:hover:border-brand/40 dark:focus-visible:ring-offset-surface-dark;
 }
 
 .cta-btn-ghost {
@@ -103,7 +104,7 @@ body {
 }
 
 .filter-pill {
-  @apply rounded-full border border-slate-200 px-4 py-2 text-xs font-medium text-slate-600 transition dark:border-surface-border dark:text-ink-muted;
+  @apply rounded-full border border-slate-200 px-4 py-2 text-xs font-medium text-slate-600 transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-surface-border dark:text-ink-muted dark:focus-visible:ring-offset-surface-dark;
 }
 
 .filter-pill-active {
@@ -115,7 +116,7 @@ body {
 }
 
 .project-link {
-  @apply inline-flex min-h-[40px] items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-brand/40 hover:text-brand dark:border-surface-border dark:text-ink dark:hover:border-brand/40;
+  @apply inline-flex min-h-[40px] items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 transition duration-200 hover:border-brand/40 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-surface-border dark:text-ink dark:hover:border-brand/40 dark:focus-visible:ring-offset-surface-dark;
 }
 
 .project-link-disabled {
@@ -135,7 +136,7 @@ body {
 }
 
 .contact-link {
-  @apply flex min-h-[44px] items-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-800 transition hover:border-brand/40 hover:text-brand dark:border-surface-border dark:bg-surface-card dark:text-ink;
+  @apply flex min-h-[44px] items-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-800 transition duration-200 hover:border-brand/40 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-surface-border dark:bg-surface-card dark:text-ink dark:focus-visible:ring-offset-surface-dark;
 }
 
 .scroll-progress {
