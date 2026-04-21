@@ -2,13 +2,32 @@ import axios from 'axios';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
+const REQUEST_TIMEOUT_MS = 12000;
+
+function withTimeout(promise, timeoutMs = REQUEST_TIMEOUT_MS) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), timeoutMs);
+    }),
+  ]);
+}
+
 async function sendTelegramMessage(token, chat_id, message) {
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
   try {
-    const res = await axios.post(url, {
-      text: message,
-      chat_id,
-    });
+    const res = await withTimeout(
+      axios.post(
+        url,
+        {
+          text: message,
+          chat_id,
+        },
+        {
+          timeout: REQUEST_TIMEOUT_MS,
+        }
+      )
+    );
     return res.data.ok;
   } catch (error) {
     console.error('Error sending Telegram message:', error.response?.data || error.message);
@@ -41,6 +60,9 @@ function getTransporter() {
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
+    connectionTimeout: REQUEST_TIMEOUT_MS,
+    greetingTimeout: REQUEST_TIMEOUT_MS,
+    socketTimeout: REQUEST_TIMEOUT_MS,
     auth: {
       user: process.env.EMAIL_ADDRESS,
       pass: process.env.GMAIL_PASSKEY,
@@ -66,7 +88,7 @@ async function sendEmail(payload, message) {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    await withTimeout(transporter.sendMail(mailOptions));
     return true;
   } catch (error) {
     console.error('Error while sending email:', error.message);

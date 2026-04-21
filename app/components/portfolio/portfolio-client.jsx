@@ -72,6 +72,7 @@ const EXP_ICONS = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function PortfolioClient() {
+  const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState("dark");
   const [locale, setLocale] = useState("en");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -83,10 +84,11 @@ export default function PortfolioClient() {
   const [errors, setErrors] = useState({});
 
   const reduceMotion = useReducedMotion();
+  const prefersReducedMotion = mounted ? !!reduceMotion : false;
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
-    stiffness: reduceMotion ? 300 : 140,
-    damping: reduceMotion ? 50 : 24,
+    stiffness: prefersReducedMotion ? 300 : 140,
+    damping: prefersReducedMotion ? 50 : 24,
     mass: 0.2,
   });
 
@@ -107,7 +109,11 @@ export default function PortfolioClient() {
     [socials]
   );
 
-  const tSection = reduceMotion ? { duration: 0.01 } : { duration: 0.5 };
+  const tSection = prefersReducedMotion ? { duration: 0.01 } : { duration: 0.5 };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -122,13 +128,13 @@ export default function PortfolioClient() {
   }, [locale]);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (!mounted || prefersReducedMotion) return;
     const onMove = (event) => {
       setCursor({ x: event.clientX, y: event.clientY });
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, [reduceMotion]);
+  }, [mounted, prefersReducedMotion]);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -215,8 +221,9 @@ export default function PortfolioClient() {
         body: JSON.stringify(payload),
       });
 
+      const responseData = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error("Request failed");
+        throw new Error(responseData?.message || copy.contact.form.error);
       }
 
       toast.success(copy.contact.form.success);
@@ -224,8 +231,8 @@ export default function PortfolioClient() {
       event.currentTarget.reset();
       setErrors({});
       window.setTimeout(() => setFormSuccess(false), 3200);
-    } catch {
-      toast.error(copy.contact.form.error);
+    } catch (error) {
+      toast.error(error?.message || copy.contact.form.error);
     } finally {
       setSending(false);
     }
@@ -249,11 +256,11 @@ export default function PortfolioClient() {
       className="relative min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={reduceMotion ? { duration: 0.01 } : { duration: 0.45 }}
+      transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.45 }}
     >
       <motion.div className="scroll-progress" style={{ scaleX: progress }} aria-hidden />
 
-      {!reduceMotion && (
+      {mounted && !prefersReducedMotion && (
         <motion.div
           className="pointer-events-none fixed z-20 hidden h-48 w-48 rounded-full bg-brand/10 blur-3xl lg:block"
           style={{ willChange: "transform" }}
@@ -506,8 +513,8 @@ export default function PortfolioClient() {
                     initial={{ opacity: 0, y: 18 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
-                    transition={reduceMotion ? { duration: 0.01 } : { duration: 0.4, delay: index * 0.05 }}
-                    whileHover={reduceMotion ? undefined : { y: -3, transition: { duration: 0.2 } }}
+                    transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.4, delay: index * 0.05 }}
+                    whileHover={prefersReducedMotion ? undefined : { y: -3, transition: { duration: 0.2 } }}
                     className="group premium-card-hover relative overflow-hidden border-brand/0 hover:border-brand/20 hover:shadow-glow-sm"
                   >
                     <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-brand/10 blur-2xl transition group-hover:bg-brand/20" />
@@ -543,7 +550,7 @@ export default function PortfolioClient() {
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.12 }}
-                    transition={reduceMotion ? { duration: 0.01 } : { duration: 0.35, delay: index * 0.04 }}
+                    transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.35, delay: index * 0.04 }}
                     className="premium-card-hover"
                   >
                     <div className="mb-4 flex items-center justify-between gap-2">
@@ -555,7 +562,7 @@ export default function PortfolioClient() {
                         initial={{ width: 0 }}
                         whileInView={{ width: `${progressPercent}%` }}
                         viewport={{ once: true }}
-                        transition={reduceMotion ? { duration: 0.01 } : { duration: 0.7, delay: 0.1 }}
+                        transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.7, delay: 0.1 }}
                         className="h-full rounded-full bg-gradient-to-r from-brand to-brand-glow"
                       />
                     </div>
@@ -595,7 +602,7 @@ export default function PortfolioClient() {
                     initial={{ opacity: 0, x: -12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
-                    transition={reduceMotion ? { duration: 0.01 } : { duration: 0.45, delay: idx * 0.06 }}
+                    transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.45, delay: idx * 0.06 }}
                     className="group relative pl-10 md:pl-12"
                   >
                     <div className="absolute left-0 top-1 flex h-6 w-6 items-center justify-center rounded-full border border-brand/40 bg-white shadow-sm dark:bg-surface-card">
@@ -676,8 +683,8 @@ export default function PortfolioClient() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.12 }}
-                  transition={reduceMotion ? { duration: 0.01 } : { duration: 0.42, delay: index * 0.06 }}
-                  whileHover={reduceMotion ? undefined : { y: -4 }}
+                  transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.42, delay: index * 0.06 }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -4 }}
                   className="group premium-card-hover relative overflow-hidden border-slate-200/90 dark:border-surface-border"
                 >
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand/[0.06] via-transparent to-brand-glow/[0.04] opacity-0 transition group-hover:opacity-100" />
@@ -752,7 +759,7 @@ export default function PortfolioClient() {
                 initial={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={reduceMotion ? { duration: 0.01 } : { duration: 0.45 }}
+                transition={prefersReducedMotion ? { duration: 0.01 } : { duration: 0.45 }}
                 className="premium-card-hover mx-auto mt-10 border-brand/15 px-8 py-10"
               >
                 <div className="mx-auto flex max-w-[140px] justify-center">
