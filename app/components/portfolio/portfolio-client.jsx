@@ -102,6 +102,11 @@ export default function PortfolioClient() {
     [personal.email, personal.github, personal.linkedIn]
   );
 
+  const contactSocials = useMemo(
+    () => socials.filter((item) => item.label !== "Email"),
+    [socials]
+  );
+
   const tSection = reduceMotion ? { duration: 0.01 } : { duration: 0.5 };
 
   useEffect(() => {
@@ -262,16 +267,9 @@ export default function PortfolioClient() {
         <div className="mesh-hero" />
       </div>
 
-      <a
-        href="#main-content"
-        className="absolute left-4 top-4 z-[100] -translate-y-[140%] rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white shadow-lg outline-none ring-2 ring-offset-2 ring-offset-white transition focus:translate-y-0 focus:ring-brand dark:bg-surface-card dark:text-ink dark:ring-offset-surface-dark"
-      >
-        {locale === "fr" ? "Aller au contenu" : "Skip to content"}
-      </a>
-
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl dark:border-surface-border dark:bg-[#0a0a0f]/75 supports-[padding:env(safe-area-inset-top)]:pt-[env(safe-area-inset-top)]">
         <nav
-          className="container flex h-14 min-h-[3.5rem] items-center justify-between sm:h-16"
+          className="container flex h-16 min-h-[4rem] items-center justify-between sm:h-[4.25rem]"
           aria-label="Primary"
         >
           <button
@@ -280,10 +278,10 @@ export default function PortfolioClient() {
             onClick={() => handleNavClick("hero")}
             aria-label="Home"
           >
-            <p className="text-sm font-semibold tracking-tight text-slate-900 dark:text-ink sm:text-base">
+            <p className="text-base font-semibold tracking-tight text-slate-900 dark:text-ink sm:text-lg">
               {personal.displayName}
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-ink-muted">{personal.location}</p>
+            <p className="text-xs text-slate-500 dark:text-ink-muted">{personal.location}</p>
           </button>
 
           <div className="desktop-nav items-center gap-0.5">
@@ -391,7 +389,7 @@ export default function PortfolioClient() {
         {/* Hero */}
         <section
           id="hero"
-          className="section relative flex min-h-[min(92vh,880px)] flex-col justify-center pt-10 sm:pt-14"
+          className="section relative flex min-h-[calc(100vh-4.25rem)] flex-col justify-center pt-8 sm:pt-12"
         >
           <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-b from-brand/[0.07] via-transparent to-transparent dark:from-brand/10" />
 
@@ -399,7 +397,7 @@ export default function PortfolioClient() {
             variants={heroContainer}
             initial="hidden"
             animate="visible"
-            className="max-w-3xl"
+            className="max-w-4xl"
           >
             <motion.p
               variants={heroItem}
@@ -881,7 +879,7 @@ export default function PortfolioClient() {
                   <FiCopy className="h-4 w-4 shrink-0 text-brand" />
                   {copy.contact.copyEmail}
                 </button>
-                {socials.map((item) => {
+                {contactSocials.map((item) => {
                   const Icon = item.icon;
                   return (
                     <a
