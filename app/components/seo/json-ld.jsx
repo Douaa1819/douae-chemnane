@@ -17,7 +17,7 @@ export default function JsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: p.name,
+    name: p.displayName,
     jobTitle: p.roleLine.split("|")[0]?.trim() || "Software Developer",
     email: p.email,
     ...(origin ? { url: origin, image: `${origin}/profile.jpg` } : {}),

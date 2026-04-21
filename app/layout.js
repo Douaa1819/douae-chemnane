@@ -1,10 +1,14 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import JsonLd from "./components/seo/json-ld";
 import "./css/globals.scss";
 
-const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 function getMetadataBase() {
   const raw = process.env.NEXT_PUBLIC_APP_URL;
@@ -18,9 +22,9 @@ function getMetadataBase() {
   }
 }
 
-const titleDefault = "Douaa Chemnane | Full Stack Developer Portfolio";
+const titleDefault = "Douaa Chemnane | Full Stack Engineer";
 const description =
-  "Premium portfolio of Douaa Chemnane — Full Stack Developer and Automation Engineer. Spring Boot, Next.js, cloud, and scalable product engineering.";
+  "Full Stack Developer focused on backend systems, AI automation, and scalable architecture. Spring Boot, React, Node.js, n8n, and production-grade delivery.";
 
 export const metadata = {
   metadataBase: getMetadataBase(),
@@ -31,12 +35,12 @@ export const metadata = {
   description,
   keywords: [
     "Douaa Chemnane",
-    "Portfolio",
     "Full Stack Developer",
-    "Automation Engineer",
-    "Next.js",
+    "Backend",
+    "AI Automation",
     "Spring Boot",
-    "Marrakesh",
+    "Next.js",
+    "System Design",
   ],
   authors: [{ name: "Douaa Chemnane" }],
   creator: "Douaa Chemnane",
@@ -53,7 +57,7 @@ export const metadata = {
         url: "/profile.jpg",
         width: 1200,
         height: 630,
-        alt: "Douaa Chemnane — portrait",
+        alt: "Douaa Chemnane",
       },
     ],
   },
@@ -77,15 +81,15 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f7ff" },
-    { media: "(prefers-color-scheme: dark)", color: "#030712" },
+    { media: "(prefers-color-scheme: light)", color: "#fafbfc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0f" },
   ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={plusJakarta.className}>
+    <html lang="en" className={inter.variable}>
+      <body className={`${inter.className} antialiased`}>
         <JsonLd />
         {children}
         <ToastContainer theme="colored" position="bottom-right" />
