@@ -6,7 +6,7 @@ export const portfolioContent = {
     linkedIn: "https://www.linkedin.com/in/douae-chemnane/",
     github: "https://github.com/Douaa1819",
     cvUrl: "/cv-douaa-chemnane.md",
-    location: "Marrakech, Morocco",
+    location: "Casablanca, Morocco",
   },
   en: {
     nav: [
@@ -42,11 +42,6 @@ export const portfolioContent = {
         "AI workflows, agents & automation (n8n)",
         "Production-grade APIs & clean engineering",
       ],
-    },
-    resume: {
-      title: "Resume",
-      subtitle: "Download my CV for roles in backend, full stack, and automation.",
-      cta: "Download CV",
     },
     services: {
       title: "Services",
@@ -139,11 +134,6 @@ export const portfolioContent = {
         "Workflows IA, agents & automation (n8n)",
         "APIs production & pratiques clean code",
       ],
-    },
-    resume: {
-      title: "CV",
-      subtitle: "Téléchargez mon CV pour des postes backend, full stack ou automation.",
-      cta: "Télécharger le CV",
     },
     services: {
       title: "Services",

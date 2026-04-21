@@ -29,7 +29,6 @@ import { portfolioContent } from "@/utils/data/portfolio-content";
 const sectionIds = [
   "hero",
   "about",
-  "resume",
   "services",
   "skills",
   "experience",
@@ -104,7 +103,6 @@ export default function PortfolioClient() {
   );
 
   const tSection = reduceMotion ? { duration: 0.01 } : { duration: 0.5 };
-  const tCard = reduceMotion ? { duration: 0.01 } : { duration: 0.45 };
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -288,7 +286,7 @@ export default function PortfolioClient() {
             <p className="text-[11px] text-slate-500 dark:text-ink-muted">{personal.location}</p>
           </button>
 
-          <div className="hidden items-center gap-0.5 xl:flex">
+          <div className="desktop-nav items-center gap-0.5">
             {copy.nav.map((item) => (
               <button
                 type="button"
@@ -326,7 +324,7 @@ export default function PortfolioClient() {
 
           <button
             type="button"
-            className="icon-btn touch-manipulation !h-10 !w-10 rounded-lg xl:hidden"
+            className="icon-btn mobile-menu-btn touch-manipulation !h-10 !w-10 rounded-lg"
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav"
@@ -340,7 +338,7 @@ export default function PortfolioClient() {
       {mobileMenuOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm xl:hidden"
+          className="mobile-menu-backdrop fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm"
           aria-label={locale === "fr" ? "Fermer le menu" : "Close menu"}
           onClick={() => setMobileMenuOpen(false)}
         />
@@ -349,7 +347,7 @@ export default function PortfolioClient() {
       {mobileMenuOpen && (
         <div
           id="mobile-nav"
-          className="fixed inset-x-3 top-[calc(3.75rem+env(safe-area-inset-top,0px))] z-40 max-h-[min(72vh,calc(100dvh-5rem))] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-surface-border dark:bg-surface-card xl:hidden"
+          className="mobile-menu-panel fixed inset-x-3 top-[calc(3.75rem+env(safe-area-inset-top,0px))] z-40 max-h-[min(72vh,calc(100dvh-5rem))] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-surface-border dark:bg-surface-card"
           role="dialog"
           aria-modal="true"
           aria-label={locale === "fr" ? "Menu de navigation" : "Mobile navigation menu"}
@@ -487,30 +485,6 @@ export default function PortfolioClient() {
                 </ul>
               </div>
             </aside>
-          </motion.div>
-        </section>
-
-        {/* Resume only — CV download */}
-        <section id="resume" className="section !py-10 sm:!py-12">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={tCard}
-            className="premium-card-hover flex flex-col items-start justify-between gap-4 border-brand/20 sm:flex-row sm:items-center"
-          >
-            <div>
-              <p className="section-kicker">{copy.resume.title}</p>
-              <p className="body-text mt-2 max-w-xl">{copy.resume.subtitle}</p>
-            </div>
-            <Link
-              href={personal.cvUrl}
-              className="cta-btn-outline touch-manipulation whitespace-nowrap"
-              download
-            >
-              {copy.resume.cta}
-            </Link>
           </motion.div>
         </section>
 

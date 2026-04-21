@@ -147,6 +147,29 @@ body {
   @apply absolute left-[11px] top-8 bottom-4 w-px bg-gradient-to-b from-brand/60 via-brand-glow/30 to-transparent md:left-[15px];
 }
 
+.desktop-nav {
+  display: none;
+}
+
+.mobile-menu-btn {
+  display: inline-flex;
+}
+
+@media (min-width: 1024px) {
+  .desktop-nav {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+  }
+
+  .mobile-menu-panel,
+  .mobile-menu-backdrop {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-progress {
     animation: none !important;
