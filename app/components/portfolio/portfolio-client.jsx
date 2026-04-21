@@ -391,13 +391,13 @@ export default function PortfolioClient() {
           id="hero"
           className="section relative flex min-h-[calc(100vh-4.25rem)] flex-col justify-center pt-14 sm:pt-16"
         >
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-brand/[0.07] via-transparent to-transparent dark:from-brand/10" />
+          <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-b from-brand/[0.07] via-transparent to-transparent dark:from-brand/10" />
 
           <motion.div
             variants={heroContainer}
             initial="hidden"
             animate="visible"
-            className="max-w-4xl"
+            className="max-w-4xl px-2 sm:px-4"
           >
             <motion.p
               variants={heroItem}
@@ -407,14 +407,14 @@ export default function PortfolioClient() {
             </motion.p>
             <motion.h1
               variants={heroItem}
-              className="heading-xl mt-5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-600 bg-clip-text font-bold text-transparent dark:from-white dark:via-ink dark:to-ink-muted"
+              className="heading-xl mt-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-600 bg-clip-text font-bold text-transparent dark:from-white dark:via-ink dark:to-ink-muted"
             >
               {copy.hero.headline}
             </motion.h1>
-            <motion.p variants={heroItem} className="mt-8 text-lg font-semibold tracking-tight text-slate-700 dark:text-ink sm:mt-9 sm:text-xl">
+            <motion.p variants={heroItem} className="mt-5 text-lg font-semibold tracking-tight text-slate-700 dark:text-ink sm:text-xl">
               {personal.roleLine}
             </motion.p>
-            <motion.p variants={heroItem} className="body-text mt-6 max-w-2xl">
+            <motion.p variants={heroItem} className="body-text mt-7 max-w-2xl">
               {copy.hero.tagline}
             </motion.p>
 
